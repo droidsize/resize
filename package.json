@@ -1,0 +1,19 @@
+{
+  "name": "DroidSize",
+  "main": "server.js",
+  "version": "1.0.0",
+  "description": "Android Icon Generator",
+  "author": "Yogesh Kumar",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.8.1",
+    "ejs": "^1.0.0",
+    "express": "^4.9.0",
+    "formidable": "^1.0.15",
+    "fs": "0.0.2",
+    "gm": "^1.16.0",
+    "morgan": "^1.3.0",
+    "multer": "^0.1.4",
+    "util": "^0.10.3"
+  }
+}

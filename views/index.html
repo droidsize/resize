@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Dropzone Express.js File upload</title>
+  
+</head>
+
+<body>
+  <h1>Express.js File uploader</h1>
+  <hr/>
+  <div id="simpleUpload">
+   
+
+
+      <form method = "post" action="/resize"  enctype="multipart/form-data">
+
+        <fieldset>
+            <legend>Select the current icon size</legend>
+
+              <input type="radio" name="iconSize" value="ldpi" />ldpi</br> 
+              <input type="radio" name="iconSize" value="mdpi" />mdpi</br>
+              <input type="radio" name="iconSize" value="tvdpi" />tvdpi</br>
+              <input type="radio" name="iconSize" value="hdpi" />hdpi</br>
+              <input type="radio" name="iconSize" value="xhdpi" />xhdpi</br>
+              <input type="radio" name="iconSize" value="xxhdpi" />xxdpi</br>
+              <input type="radio" name="iconSize" value="xxxdpi" />xxxhdpi</br>
+
+        </fieldset>
+
+        <input type="file" id="upload" accept="image/*" name="myFile" multiple>
+
+        <fieldset>
+          <legend>Select the required icon sizes</legend>
+            <input type="checkbox" name="reqIconSizes" value="ldpi" />ldpi</br>
+            <input type="checkbox" name="reqIconSizes" value="mdpi" />mdpi</br>
+            <input type="checkbox" name="reqIconSizes" value="tvdpi" />tvdpi</br>
+            <input type="checkbox" name="reqIconSizes" value="hdpi" />hdpi</br>
+            <input type="checkbox" name="reqIconSizes" value="xhdpi" />xhdpi</br>
+            <input type="checkbox" name="reqIconSizes" value="xxhdpi" />xxhdpi</br>
+            <input type="checkbox" name="reqIconSizes" value="xxxhdpi" />xxxhdpi</br>
+        </fieldset>
+
+        <button type="submit" value="Process">Process</button>
+      </form>
+
+
+</body>
+
+</html>
