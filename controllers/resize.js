@@ -29,16 +29,10 @@ exports.postResize = function(req, res, next) {
                 var images = req.files.myFile;
 				if(images instanceof Array){
                     for(image in images){
-                        var filePath = image.path;
-                        console.log(filePath);
-                        var name = image.originalname;
-                        var dimensions = getImageDimensions(filePath);
-                        console.log(dimensions);
-                        var sizeRatios = computeRatio(iconSize);
-                        console.log(sizeRatios);
-                        for(ratio in sizeRatios){
-                            resizeImage(path, name, dimensions.width, dimensions.height, ratio);
-                        }
+                        var filePath = images[image].path;
+                        console.log("req.files "+filePath);
+                        var name = images[image].originalname;
+                        resizeImage(filePath, name, iconSize, computeRatio);
                     }
                     res.end("we got your files");
                 }
@@ -68,13 +62,13 @@ function resizeImage(path, name, iconSize, computeRatio) {
             console.log(dimensions);
 
             for(ratio in sizeRatios){
-                var width = parseFloat((dimensions.width/ratio).toFixed(2));
-                var height = parseFloat((dimensions.height/ratio).toFixed(2));
+                var width = parseFloat((dimensions.width*sizeRatios[ratio]).toFixed(2));
+                var height = parseFloat((dimensions.height*sizeRatios[ratio]).toFixed(2));
             gm(path)
                 .options({imageMagick: true})
-                .resize(width/ratio, height/ratio)
+                .resize(width, height)
                 .noProfile()
-                .write('./public/uploads/output/'+ratio.toString()+name, function(err){
+                .write('./public/uploads/output/'+sizeRatios[ratio].toString()+name, function(err){
                     if(!err)
                         console.log('done');
                     });
