@@ -6,7 +6,7 @@ var logger = require('morgan');
 var multer = require('multer');
 var util = require('util');
 var path = require('path');
-var resizeController = require('./controllers/resize')
+var resizeController = require('./controllers/resize');
 //Create our express application
 var app = express();
 

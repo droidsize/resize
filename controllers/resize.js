@@ -10,7 +10,7 @@ var path = require('path');
 //Creating routes for the resize 
 exports.getResize = function(req, res){
         res.render('index', {title: "I love files"});
-    }
+    };
 
 exports.postResize = function(req, res, next) {
     var iconSize = req.body.iconSize;
@@ -30,6 +30,7 @@ exports.postResize = function(req, res, next) {
 				if(images instanceof Array){
                     for(image in images){
                         var filePath = image.path;
+                        console.log(filePath);
                         var name = image.originalname;
                         var dimensions = getImageDimensions(filePath);
                         console.log(dimensions);
@@ -39,46 +40,73 @@ exports.postResize = function(req, res, next) {
                             resizeImage(path, name, dimensions.width, dimensions.height, ratio);
                         }
                     }
+                    res.end("we got your files");
                 }
 
                 else {
                     var filePath = images.path;
+                    console.log("req.files "+filePath);
                     var name = images.originalname;
-                    var dimensions = getImageDimensions(filePath);
-                    var sizeRatios = computeRatio(iconSize);
-                    for(ratio in sizeRatios){
-                        resizeImage(path, name, dimensions.width, dimensions.height, ratio);
-                    }
+                    resizeImage(filePath, name, iconSize, computeRatio);
+                    res.end("We got your files");
                 }
-                res.end("We got your files");
 		      }	
 	       }
-        }
+        };
 
-function getImageDimensions(path){
-    var dimensions = new Object();
+function resizeImage(path, name, iconSize, computeRatio) {
+    //Getting the image dimensions
+    var dimensions = {};
+    var sizeRatios = computeRatio(iconSize);
+    console.log(sizeRatios);
     easyimage.info(path).then(
         function(file) {
             console.log(file);
             dimensions.width = file.width;
             dimensions.height = file.height;
+            console.log("getImageDimensions function :");
+            console.log(dimensions);
+
+            for(ratio in sizeRatios){
+                var width = parseFloat((dimensions.width/ratio).toFixed(2));
+                var height = parseFloat((dimensions.height/ratio).toFixed(2));
+            gm(path)
+                .options({imageMagick: true})
+                .resize(width/ratio, height/ratio)
+                .noProfile()
+                .write('./public/uploads/output/'+ratio.toString()+name, function(err){
+                    if(!err)
+                        console.log('done');
+                    });
+        }
+            
         }, function (err){
             console.log(err);
+            return err;
         }
-    );
-    return dimensions;
+    );    
+    console.log(dimensions);
+    
 }
 
 
-function resizeImage(path, name, width, height, ratio) {
-    gm(path)
-        .options({imageMagick: true})
-        .resize(width/2, height/2)
-        .noProfile()
-        .write('./public/uploads/output/'+ratio.toString()+name, function(err){
-            if(!err)
-                console.log('done')
-        });
+function getImageDimensions(path){
+    console.log("getImageDimensions function :"+path);
+    var dimensions = new Object();
+
+    easyimage.info(path).then(
+        function(file) {
+            console.log(file);
+            dimensions.width = file.width;
+            dimensions.height = file.height;
+            console.log("getImageDimensions function :");
+            console.log(dimensions);
+            return dimensions;
+        }, function (err){
+            console.log(err);
+            return err;
+        }
+    );    
 }
 
 function computeRatio(iconSize){
@@ -90,7 +118,7 @@ function computeRatio(iconSize){
     http://stackoverflow.com/questions/11581649/about-android-image-size-and-assets-sizes
     */
 
-    var requiredSizes = new Array();
+    var requiredSizes = [];
 
     if(iconSize === 'mdpi'){
         requiredSizes = [0.75, 1.33, 1.5, 2, 3, 4];
