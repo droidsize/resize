@@ -13,13 +13,12 @@ exports.getResize = function(req, res){
     };
 
 exports.postResize = function(req, res, next) {
-    var iconSize = req.body.iconSize;
-    var reqIconSizes = req.body.reqIconSizes;
     console.log(reqIconSizes);
 
-	if(req.files){
+	if(req.files && req.body.iconSize;) {
+        var iconSize = req.body.iconSize;
+        var reqIconSizes = req.body.reqIconSizes;
 		console.log(util.inspect(req.files));
-		//console.log(util.inspect(req.body));
 
 		if(typeof req.files.myFile.size === 0){
 			return next(new Error("Hey you need to select a file"));
@@ -139,4 +138,16 @@ function computeRatio(iconSize){
     }
 
     return requiredSizes;
+}
+
+function deleteFile(path){
+    fs.exists(path, function(exists){
+        if(exists){
+            fs.unlink(path, function(err){
+                if(err)
+                    throw err;
+                console.log("Successfully deleted file");
+            });
+        }
+    });
 }
