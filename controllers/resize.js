@@ -6,6 +6,7 @@ var path = require('path');
 var easyimage = require('easyimage');
 var gm = require('gm');
 var path = require('path');
+var random = require('./random');
 
 //Creating routes for the resize 
 exports.getResize = function(req, res){
@@ -15,7 +16,8 @@ exports.getResize = function(req, res){
 exports.postResize = function(req, res, next) {
     console.log(reqIconSizes);
 
-	if(req.files && req.body.iconSize;) {
+	if(req.files && req.body.iconSize) {
+        var session_folder = random.randomString(5);
         var iconSize = req.body.iconSize;
         var reqIconSizes = req.body.reqIconSizes;
 		console.log(util.inspect(req.files));
@@ -31,7 +33,7 @@ exports.postResize = function(req, res, next) {
                         var filePath = images[image].path;
                         console.log("req.files "+filePath);
                         var name = images[image].originalname;
-                        resizeImage(filePath, name, iconSize, computeRatio);
+                        resizeImage(filePath, name, session_folder, iconSize, computeRatio);
                     }
                     res.end("we got your files");
                 }
@@ -40,14 +42,14 @@ exports.postResize = function(req, res, next) {
                     var filePath = images.path;
                     console.log("req.files "+filePath);
                     var name = images.originalname;
-                    resizeImage(filePath, name, iconSize, computeRatio);
+                    resizeImage(filePath, name, session_folder, iconSize, computeRatio);
                     res.end("We got your files");
                 }
 		      }	
 	       }
         };
 
-function resizeImage(path, name, iconSize, computeRatio) {
+function resizeImage(path, name, session_folder, iconSize, computeRatio) {
     //Getting the image dimensions
     var dimensions = {};
     var sizeRatios = computeRatio(iconSize);
@@ -59,15 +61,25 @@ function resizeImage(path, name, iconSize, computeRatio) {
             dimensions.height = file.height;
             console.log("getImageDimensions function :");
             console.log(dimensions);
+            fs.mkdir('./public/uploads/output/'+session_folder, function(e){
+                    if(!e || (e && e.code === 'EEXIST')){
+                        console.log("Directory created "+ session_folder);
+                    }
+                    else{
+                        //debug
+                        console.log(e);
+                    }
+                });
 
             for(ratio in sizeRatios){
                 var width = parseFloat((dimensions.width*sizeRatios[ratio]).toFixed(2));
                 var height = parseFloat((dimensions.height*sizeRatios[ratio]).toFixed(2));
-            gm(path)
+                gm(path)
                 .options({imageMagick: true})
                 .resize(width, height)
                 .noProfile()
-                .write('./public/uploads/output/'+sizeRatios[ratio].toString()+name, function(err){
+                .write('./public/uploads/output/'+session_folder+'/'
+                    +sizeRatios[ratio].toString()+name, function(err){
                     if(!err)
                         console.log('done');
                     });

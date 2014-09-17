@@ -7,10 +7,10 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.8.1",
+    "crypto": "0.0.3",
     "easyimage": "^1.0.2",
     "ejs": "^1.0.0",
     "express": "^4.9.0",
-    "formidable": "^1.0.15",
     "fs": "0.0.2",
     "gm": "^1.16.0",
     "jszip": "^2.4.0",
