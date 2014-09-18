@@ -1,7 +1,6 @@
 //Getting the required packages
 var express = require('express');
 var bodyParser = require('body-parser');
-var formidable = require('formidable');
 var logger = require('morgan');
 var multer = require('multer');
 var util = require('util');
