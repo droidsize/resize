@@ -2,7 +2,7 @@
 >Generate and batch process image resizing for different resolutions in Android.
 
 ## Getting Started
-This repository requires [node](nodejs.org) '~10.0+' and [express](https://github.com/strongloop/express) '~4.0+'
+This repository requires [node](nodejs.org) `~0.10+` and [express](https://github.com/strongloop/express) `~4.0+`
 
 Install [imageMagick](www.imagemagick.org) for your OS. In Mac, you can do this by:
 
